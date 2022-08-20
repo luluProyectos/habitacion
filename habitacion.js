@@ -1,6 +1,8 @@
 img="";
 var status_modelo="";
 
+objects=[];
+
 function preload(){
     img=loadImage("recamara.png");
 }
@@ -21,11 +23,19 @@ function modelLoaded(){
 
 function draw() {
     image(img, 0, 0, 640, 420);
-    /*fill(255, 0, 0);
-    text("Perro", 45, 75);
-    noFill();
-    stroke(255, 0, 0);
-    rect(30, 60, 450, 350 );*/
+    if (status_modelo!="") {
+        for (i =0;i < objects.length;i++) {
+            document.getElementById("status").innerHTML="Estatus: objeto detectado";
+            percent=floor(objects[i].confidence*100);
+            text(objects[i].label+"  "+percent+ "%",objects[i].x+15, objects[i].y+15);
+            noFill();
+            stroke(255, 0, 0);
+            rect(objects[i].x, objects[i].y,objects[i].width, objects[i].height);
+        } 
+        
+        document.getElementById("objetos_detectados").innerHTML="Hay 2 objetos grandes en la imagen, de los cuales el modelo cocossd detectó "+objects.length;
+        
+    }
   }
 
   function pagina_Principal(){
@@ -37,5 +47,6 @@ function draw() {
       console.error(error);
     }else{
         console.log(results);
+        objects=results;
     }
 }
